@@ -1,16 +1,3 @@
-terraform {
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = "~> 4.12.1"
-    }
-  }
-}
-
-provider "aws" {
-  region = var.region
-}
-
 data "aws_subnets" "public" {
   filter {
     name   = "vpc-id"
