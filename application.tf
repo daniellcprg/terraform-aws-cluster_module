@@ -38,7 +38,7 @@ resource "aws_ecs_task_definition" "td" {
       portMappings = [
         {
           containerPort = var.applications[count.index].port
-          hostPort      = 80
+          hostPort      = var.applications[count.index].port
         }
       ],
       environment = [
