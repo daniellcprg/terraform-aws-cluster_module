@@ -40,6 +40,12 @@ resource "aws_ecs_task_definition" "td" {
           containerPort = var.applications[count.index].port
           hostPort      = 80
         }
+      ],
+      environment = [
+        {
+          name = "NODE_ENV",
+          value = var.cluster_environment
+        }
       ]
     },
   ])
