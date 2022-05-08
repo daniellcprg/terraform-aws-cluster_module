@@ -14,6 +14,19 @@ resource "aws_ecr_repository" "main" {
   }
 }
 
+resource "aws_cloudwatch_log_group" "log_group" {
+  name = format(
+    "/ecs/%s-%s-%s",
+    var.applications[count.index].name,
+    var.applications[count.index].type,
+    var.cluster_environment
+  )
+
+  tags = {
+    Environment = var.cluster_environment,
+  }
+}
+
 resource "aws_ecs_task_definition" "td" {
   count = length(var.applications)
 
@@ -43,17 +56,22 @@ resource "aws_ecs_task_definition" "td" {
       ],
       environment = [
         {
-          name = "NODE_ENV",
+          name  = "NODE_ENV",
           value = var.cluster_environment
         }
       ],
-       logConfiguration = {
-        logDriver = "awslogs",
+      logConfiguration = {
+        logDriver     = "awslogs",
         secretOptions = null,
         options = {
-          "awslogs-group": format("/ecs/%s", var.cluster_environment),
-          "awslogs-region": "us-east-1",
-          "awslogs-stream-prefix": "ecs"
+          "awslogs-group" : format(
+            "/ecs/%s-%s-%s",
+            var.applications[count.index].name,
+            var.applications[count.index].type,
+            var.cluster_environment
+          ),
+          "awslogs-region" : "us-east-1",
+          "awslogs-stream-prefix" : "ecs"
         }
       },
     },
