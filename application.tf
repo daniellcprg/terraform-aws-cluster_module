@@ -46,7 +46,16 @@ resource "aws_ecs_task_definition" "td" {
           name = "NODE_ENV",
           value = var.cluster_environment
         }
-      ]
+      ],
+       logConfiguration = {
+        logDriver = "awslogs",
+        secretOptions = null,
+        options = {
+          "awslogs-group": format("/ecs/%s", var.cluster_environment),
+          "awslogs-region": "us-east-1",
+          "awslogs-stream-prefix": "ecs"
+        }
+      },
     },
   ])
 
