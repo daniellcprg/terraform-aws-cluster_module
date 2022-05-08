@@ -15,6 +15,8 @@ resource "aws_ecr_repository" "main" {
 }
 
 resource "aws_cloudwatch_log_group" "log_group" {
+  count = length(var.applications)
+
   name = format(
     "/ecs/%s-%s-%s",
     var.applications[count.index].name,
